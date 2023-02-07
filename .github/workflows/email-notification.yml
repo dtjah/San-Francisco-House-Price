@@ -22,7 +22,6 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      with:
       # Specify connection via URL (replaces server_address, server_port, secure,
       # username and password)
       #
