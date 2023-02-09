@@ -20,7 +20,11 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install -r requirements.txt
+        pip install smtplib
+        pip install util
+        pip install pandas
+        pip install requests
+        pip install os
 
     - name: Run Python script
       run: |
