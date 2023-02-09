@@ -1,5 +1,6 @@
 import smtplib
 import requests
+import os
 from email.mime.text import MIMEText
 
 def analyze_data(repo_url):
@@ -22,12 +23,16 @@ def send_email(result):
     msg['From'] = sender
     msg['To'] = recipient
 
+    # Get the sender password from the GitHub secrets
+    sender_password = os.environ.get('MAIL_PASSWORD')
+    sender = os.environ.get('MAIL_USERNAME') 
+
     # Send the email
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
     server.starttls()
     server.ehlo()
-    server.login(sender, 'sender_password')
+    server.login(sender, sender_password)
     server.sendmail(sender, recipient, msg.as_string())
     server.quit()
 
