@@ -1,0 +1,17 @@
+name: Analyze and Send Email
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  analyze_and_send_email:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run Python script
+      run: send-email.py
