@@ -43,7 +43,7 @@ def send_email(result):
         return "Error while sending email: {}".format(e)
 
 # URL of the GitHub repository
-repo_url = 'https://github.com/dtjah/San-Francisco-House-Price.git'
+repo_url = 'https://github.com/dtjah/San-Francisco-House-Price'
 
 # Check for new data
 try:
