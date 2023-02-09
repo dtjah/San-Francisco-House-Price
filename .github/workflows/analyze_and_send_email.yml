@@ -22,8 +22,8 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install secure-smtplib
-        pip install requests
-        pip install os
+        import requests
+        import os
 
     - name: Run Python script
       run: |
