@@ -23,6 +23,15 @@ jobs:
         pip install --upgrade pip
         pip install secure-smtplib
         pip install requests
+        
+    - name: Run tests
+      env:
+        # Optional (recommended) mail server username:
+        MAIL_USERNAME: ${{secrets.MAIL_USERNAME}}
+        # Optional (recommended) mail server password:
+        MAIL_PASSWORD: ${{secrets.MAIL_PASSWORD}}
+      run: |
+        nbdev_test_nbs
 
     - name: Run Python script
       run: |
