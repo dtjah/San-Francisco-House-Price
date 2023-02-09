@@ -22,13 +22,6 @@ jobs:
       run: |
         pip install -r requirements.txt
 
-    - name: Debug information
-      run: |
-        echo "Python version:"
-        python --version
-        echo "Working directory contents:"
-        ls -la
-
     - name: Run Python script
       run: |
-        python send-email.py
+        python analyze_and_send_email.py
