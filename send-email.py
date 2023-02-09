@@ -13,7 +13,7 @@ def analyze_data(repo_url):
     return result
 
 def send_email(result):
-    sender = 'davidsetiawantjahjadi@gmail.com'
+    sender = os.environ.get('MAIL_USERNAME')
     recipient = 'dtjahjadi1@babson.edu'
     subject = 'Data Analysis Result'
     message = 'The result of the data analysis is as follows: \n\n' + result
@@ -25,7 +25,7 @@ def send_email(result):
 
     # Get the sender password from the GitHub secrets
     sender_password = os.environ.get('MAIL_PASSWORD')
-    sender = os.environ.get('MAIL_USERNAME') 
+ 
 
     # Send the email
     server = smtplib.SMTP('smtp.gmail.com', 587)
