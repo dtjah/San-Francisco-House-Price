@@ -1,59 +1,50 @@
-import smtplib
-import requests
 import os
-from email.mime.text import MIMEText
+import requests
+import smtplib
 
-def analyze_data(repo_url):
-    # Get the latest data from the GitHub repository
-    try:
-        response = requests.get(repo_url)
-        response.raise_for_status()
-        data = response.json()
-    except requests.exceptions.RequestException as e:
-        return "Error while retrieving data: {}".format(e)
+def get_secret(secret_name):
+    response = requests.get(f"https://api.github.com/repos/dtjah/San-Francisco-House-Price/actions/secrets/{secret_name}",
+                            headers={"Authorization": f"token {os.environ['GITHUB_TOKEN']}"})
+    if response.status_code == 200:
+        return response.json()["encrypted_value"]
+    else:
+        raise Exception(f"Failed to retrieve secret {secret_name}: {response.json()['message']}")
 
-    # Perform data analysis here
-    result = "Data analysis successful."
-    return result
+def get_latest_commit(repo_name):
+    # Use the Github API to fetch information about the repository
+    response = requests.get(f"https://api.github.com/repos/{repo_name}/commits")
+    # Extract the latest commit hash from the response
+    latest_commit = response.json()[0]["sha"]
+    return latest_commit
 
-def send_email(result):
-    sender = os.environ.get('MAIL_USERNAME')
-    recipient = 'dtjahjadi1@babson.edu'
-    subject = 'Data Analysis Result'
-    message = 'The result of the data analysis is as follows: \n\n' + result
+def send_email(subject, message):
+    email = get_secret("MAIL_USERNAME")
+    password = get_secret("MAIL_PASSWORD")
+    # Connect to the email server
+    server = smtplib.SMTP("smtp.gmail.com", 587)
+    server.ehlo()
+    server.starttls()
+    server.login(email, password)
+    # Construct the email message
+    email_message = f"Subject: {subject}\n\n{message}"
+    # Send the email
+    server.sendmail(email, "dtjahjadi1@babson.edu", email_message)
+    # Close the connection to the email server
+    server.quit()
 
-    msg = MIMEText(message)
-    msg['Subject'] = subject
-    msg['From'] = sender
-    msg['To'] = recipient
+def main():
+    repo_name = "dtjah/San-Francisco-House-Price"
+    # Get the latest commit for the first time
+    latest_commit = get_latest_commit(repo_name)
+    while True:
+        # Check for changes every 60 seconds
+        time.sleep(60)
+        new_commit = get_latest_commit(repo_name)
+        if new_commit != latest_commit:
+            # A new commit has been pushed to the repository
+            send_email("Github repository update", f"The repository {repo_name} has been updated with a new commit: {new_commit}")
+            # Update the latest commit
+            latest_commit = new_commit
 
-    # Get the sender password from the GitHub secrets
-    sender_password = os.environ.get('MAIL_PASSWORD')
- 
-    try:
-        # Send the email
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.ehlo()
-        server.starttls()
-        server.ehlo()
-        server.login(sender, sender_password)
-        server.sendmail(sender, recipient, msg.as_string())
-        server.quit()
-    except smtplib.SMTPException as e:
-        return "Error while sending email: {}".format(e)
-
-# URL of the GitHub repository
-repo_url = 'https://github.com/dtjah/San-Francisco-House-Price'
-
-# Check for new data
-try:
-    response = requests.get(repo_url + '/commits')
-    response.raise_for_status()
-    commits = response.json()
-    new_data = len(commits) > 0 # Change this line to check for new data in your use case
-except requests.exceptions.RequestException as e:
-    print("Error while checking for new data: {}".format(e))
-else:
-    if new_data:
-        result = analyze_data(repo_url + '/contents/data.json')
-        send_email(result)
+if __name__ == "__main__":
+    main()
