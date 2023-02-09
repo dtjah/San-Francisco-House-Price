@@ -25,9 +25,10 @@ def main():
     data = response.json()
     new_commit = data[0]["sha"]
     
-    recipient = "dtjahjadi1@babson.edu" , "davidst611@gmail.com"
+    recipient = ["dtjahjadi1@babson.edu" , "davidst611@gmail.com"]
     message = f"The repository {repo_name} has been updated with a new commit: {new_commit}\n\nBest regards,\nDavid Setiawan Tjahjadi"
-    send_email("Github repository update", message, recipient)
+    for recipient in recipients:
+        send_email("Github repository update", message, recipient)
 
 
 if __name__ == "__main__":
