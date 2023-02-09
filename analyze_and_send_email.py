@@ -2,12 +2,9 @@ import smtplib
 import os
 import requests
 
-import smtplib
-import os
-
 def send_email(subject, body, recipient):
-    email = os.getenv("MAIL_USERNAME")
-    password = os.getenv("MAIL_PASSWORD")
+    email = os.getenv('MAIL_USERNAME')
+    password = os.getenv('MAIL_PASSWORD')
     if not email or not password:
         raise Exception("MAIL_USERNAME and MAIL_PASSWORD must be set as environment variables.")
     server = smtplib.SMTP('smtp.gmail.com', 587)
