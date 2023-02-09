@@ -37,7 +37,7 @@ def send_email(result):
     server.quit()
 
 # URL of the GitHub repository
-repo_url = 'https://api.github.com/repos/user/repo'
+repo_url = 'https://github.com/dtjah/San-Francisco-House-Price.git'
 
 # Check for new data
 response = requests.get(repo_url + '/commits')
