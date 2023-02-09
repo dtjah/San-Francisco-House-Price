@@ -22,8 +22,6 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install secure-smtplib
-        pip install util
-        pip install pandas
         pip install requests
         pip install os
 
