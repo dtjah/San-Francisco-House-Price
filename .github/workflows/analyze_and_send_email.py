@@ -7,7 +7,7 @@ def get_email_and_password():
     password = os.environ.get("MAIL_PASSWORD")
     return email, password
 
-def send_email(subject, body):
+def send_email(subject, body, recipient):
     email, password = get_email_and_password()
     smtp_server = "smtp.gmail.com"
     port = 587
