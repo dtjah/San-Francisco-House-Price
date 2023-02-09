@@ -21,6 +21,7 @@ def send_email(subject, body, recipient):
     server.sendmail(email, recipient, message)
     server.quit()
 
+
 def main():
     repo_name = "San-Francisco-House-Price"
     url = f"https://api.github.com/repos/dtjah/{repo_name}/commits"
